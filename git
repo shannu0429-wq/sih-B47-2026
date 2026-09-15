@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
+
+venv/
+.venv/
+env/
+
+*.log
+
+static/captures/
+static/user_captures/
+captures/

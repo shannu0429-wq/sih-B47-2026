@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<title>Smart Crop Protection | Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+:root{
+    --green-primary:#2e7d32;
+    --dark-green-bg:#1b5e20;
+    --border-color:#d9d9d9;
+}
+body{
+    min-height:100vh;
+    font-family:'Poppins',sans-serif;
+    background-image:url("https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?fm=jpg&q=60&w=3000&auto=format&fit=crop");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    padding:0;
+}
+.navbar{
+    width:100%;
+    height:75px;
+    display:flex;
+    align-items:center;
+    padding:0 28px;
+    background:rgba(255,255,255,0.97);
+    border-bottom:1px solid #e5eae5;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000;
+}
+.menu-btn{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-right:18px;
+    border:none;
+    border-radius:12px;
+    background:var(--green-primary);
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    box-shadow:0 5px 12px rgba(46,125,50,0.25);
+    transition:all 0.3s ease;
+}
+.menu-btn:hover{
+    background:var(--dark-green-bg);
+    transform:translateY(-2px);
+    box-shadow:0 7px 18px rgba(46,125,50,0.35);
+}
+.menu-btn:active{
+    transform:scale(0.94);
+}
+.logo{
+    text-decoration:none;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.logo-title{
+    font-size:25px;
+    font-weight:800;
+    color:#249b38;
+}
+.logo-subtitle{
+    margin-top:2px;
+    font-size:11px;
+    color:#777;
+    letter-spacing:0.3px;
+}
+.profile-page{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:110px;
+    padding-bottom:40px;
+    padding-left:20px;
+    padding-right:20px;
+}
+.container{
+    width:100%;
+    max-width:600px;
+    background:rgba(255,255,255,0.98);
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.20);
+    margin-top:10px;
+}
+.profile-header{
+    text-align:center;
+    margin-bottom:30px;
+}
+.profile-header img{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:15px;
+    border:3px solid var(--green-primary);
+}
+.profile-header h1{
+    color:var(--green-primary);
+    font-size:28px;
+}
+.profile-header p{
+    color:#666;
+    margin-top:5px;
+}
+.profile-info{
+    border-top:1px solid var(--border-color);
+    padding-top:20px;
+}
+.info{
+    margin-bottom:20px;
+}
+.info label{
+    display:block;
+    color:#777;
+    font-size:14px;
+    margin-bottom:5px;
+}
+.info p{
+    padding:12px;
+    border:1px solid var(--border-color);
+    border-radius:8px;
+    background:#fafafa;
+    color:#333;
+    word-break:break-word;
+}
+.buttons{
+    display:flex;
+    gap:15px;
+    margin-top:30px;
+}
+.buttons a{
+    flex:1;
+    text-align:center;
+    padding:12px;
+    border-radius:25px;
+    text-decoration:none;
+    font-weight:600;
+    transition:all 0.3s ease;
+}
+.dashboard{
+    background:var(--green-primary);
+    color:white;
+}
+.dashboard:hover{
+    background:var(--dark-green-bg);
+}
+.logout{
+    background:#eeeeee;
+    color:#333;
+}
+.logout:hover{
+    background:#dddddd;
+}
+.delete-account{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:1px solid #d32f2f;
+    border-radius:25px;
+    background:white;
+    color:#d32f2f;
+    font-family:'Poppins',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+.delete-account:hover{
+    background:#d32f2f;
+    color:white;
+}
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-300px;
+    width:300px;
+    height:100vh;
+    background:white;
+    z-index:2000;
+    transition:left 0.3s ease;
+    box-shadow:3px 0 15px rgba(0,0,0,0.2);
+}
+.sidebar.active{
+    left:0;
+}
+.sidebar-header{
+    height:90px;
+    padding:20px;
+    background:var(--green-primary);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.sidebar-title{
+    font-size:20px;
+    font-weight:bold;
+}
+.sidebar-subtitle{
+    font-size:11px;
+    margin-top:5px;
+}
+.close-btn{
+    border:none;
+    background:transparent;
+    color:white;
+    font-size:30px;
+    cursor:pointer;
+}
+.sidebar-links{
+    padding:15px;
+}
+.sidebar-links a{
+    display:block;
+    padding:15px;
+    margin-bottom:5px;
+    color:#333;
+    text-decoration:none;
+    font-size:16px;
+    border-radius:8px;
+    border-bottom:1px solid #eee;
+    transition:all 0.2s ease;
+}
+.sidebar-links a:hover{
+    background:#e8f5e9;
+    color:var(--green-primary);
+}
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    z-index:1500;
+    display:none;
+}
+.overlay.active{
+    display:block;
+}
+@media (max-width:600px){
+    .navbar{
+        height:70px;
+        padding:0 15px;
+    }
+    .menu-btn{
+        width:42px;
+        height:42px;
+        margin-right:12px;
+    }
+    .logo-title{
+        font-size:18px;
+    }
+    .logo-subtitle{
+        font-size:9px;
+    }
+    .profile-page{
+        padding-top:90px;
+        padding-left:12px;
+        padding-right:12px;
+    }
+    .container{
+        padding:25px 20px;
+        border-radius:15px;
+    }
+    .profile-header h1{
+        font-size:23px;
+    }
+    .buttons{
+        flex-direction:column;
+    }
+    .sidebar{
+        width:280px;
+        left:-280px;
+    }
+}
+</style>
+</head>
+<body>
+<nav class="navbar">
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+<a href="/index" class="logo">
+<div class="logo-title" data-translate>Smart Farm Assistant</div>
+<div class="logo-subtitle" data-translate>IOT Powered Smart Crop Protection</div>
+</a>
+</nav>
+<div class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div>
+<div class="sidebar-title">Smart Farm Assistant</div>
+<div class="sidebar-subtitle">IOT Powered Smart Crop Protection</div>
+</div>
+<button class="close-btn" onclick="toggleSidebar()">×</button>
+</div>
+<div class="sidebar-links">
+<a href="/index">🏠 Dashboard</a>
+<a href="/camera">📡 Monitoring</a>
+<a href="/notifications">🔔 Notifications</a>
+<a href="/about">ℹ️ About</a>
+</div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<main class="profile-page">
+<div class="container">
+<div class="profile-header">
+<img src="{{ url_for('static', filename='sih logo.jpeg') }}" alt="Smart Farm Logo">
+<h1>Welcome, {{ user.fullname }}!</h1>
+<p>Smart Farm Assistant</p>
+</div>
+<div class="profile-info">
+<div class="info">
+<label>Full Name</label>
+<p>{{ user.fullname }}</p>
+</div>
+<div class="info">
+<label>Email Address</label>
+<p>{{ user.email }}</p>
+</div>
+<div class="info">
+<label>Mobile Number</label>
+<p>{{ user.mobile }}</p>
+</div>
+<div class="info">
+<label>Username</label>
+<p>{{ user.username }}</p>
+</div>
+<div class="info">
+<label>Account Created</label>
+<p>{{ user.created_at }}</p>
+</div>
+</div>
+<div class="buttons">
+<a href="/index" class="dashboard">Dashboard</a>
+<a href="/logout" class="logout">Logout</a>
+</div>
+<form action="{{ url_for('delete_account') }}" method="post" onsubmit="return confirm('Are you sure you want to permanently delete your account?');">
+<button type="submit" class="delete-account">Delete Account</button>
+</form>
+</div>
+</main>
+<script>
+function toggleSidebar(){
+    const sidebar=document.getElementById("sidebar");
+    const overlay=document.getElementById("overlay");
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+}
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
+</body>
+</html>

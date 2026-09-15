@@ -1,0 +1,194 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Smart Crop Protection | Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+         <link
+        rel="icon"
+        type="image/x-icon"
+        href="{{ url_for('static', filename='favicon.ico') }}"
+    >
+    <style>
+       * {
+    box-sizing: border-box;
+    margin: 0;
+    
+    padding: 0;
+}
+
+:root {
+    --green-primary: #2e7d32;
+    --dark-green-bg: #1b5e20;
+    --border-color: #d9d9d9;
+}
+
+body {
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    background-image: url("https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmYXJtfGVufDB8fDB8fHww");
+    background-size: cover;
+    background-position: center;
+}
+
+form {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+.left {
+    width: 50%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.right {
+    width: 50%;
+    padding: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login {
+    width: 100%%;
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+#login h2 {
+    color: var(--green-primary);
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+#login input {
+    outline: none;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: white;
+    font-size: 1rem;
+}
+
+#login input:focus {
+    border-color: var(--green-primary);
+}
+
+#login input::placeholder {
+    color: #777;
+}
+
+#login button {
+    width: 100%;
+    padding: 12px 30px;
+    background-color: var(--green-primary);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom:25px;
+}
+
+#login button:hover {
+    background-color: var(--dark-green-bg);
+}
+
+#login button:active {
+    transform: translateY(2px);
+}
+
+#login a {
+    color: var(--green-primary) !important;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+#login a:hover {
+    text-decoration: underline;
+}
+#login label {
+    display: block;
+    text-align: left;
+    padding-left:8px;
+    font-weight:500;
+    margin-bottom: 10px;
+}
+#login #p1{
+    color:#2e7d32;
+    font-size:25px;
+}
+#login #p2{
+    color:#2e7d32;
+    font-size:20px;
+}
+
+#signup {
+    color: var(--green-primary);
+    background-color: transparent;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+#signup:hover {
+    
+    text-decoration: underline;
+}
+    </style>
+</head>
+
+<body>
+
+    <form action="/login" method="POST">
+
+        <div class="left">
+            <h1>Smart Farm Assistant</h1>
+        <img
+    src="{{ url_for('static', filename='sih logo.jpeg') }}"
+    alt="Smart Farm Logo"
+    width="60"
+    style="border-radius: 100px; opacity: 0.7;"
+>
+        </div>
+
+        <div class="right">
+            <div id="login">
+                <p id="p1">Welcome Back!</p>
+                <p id="p2">Log In</p>
+                <label>Username</label>
+                <input type="text"   name="username" placeholder="Enter your username" id="login1">
+                <label>Password</label>
+                <input type="password"   name="password" placeholder="Enter your password" id="password1">
+                
+                <button type="submit">Log In</button>
+                <br>
+                
+                <label style="text-align:center;color:#2e7d32">Don't have an account?</label>
+                <a href="/signup" id="signup" style="text-decoration:none">Sign up</a>
+                
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+    </script>
+
+</body>
+</html>
