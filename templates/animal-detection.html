@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Protection | Monitoring</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f8f3;
+            color: #222;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 22px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .btn-green {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-red {
+            background: #c62828;
+            color: white;
+        }
+
+        .btn-blue {
+            background: #1565c0;
+            color: white;
+        }
+
+        .btn-gray {
+            background: #555;
+            color: white;
+        }
+
+        .btn-dark-red {
+            background: #8e0000;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
+
+        .monitor-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+            margin-bottom: 30px;
+        }
+
+        .monitor-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .video-container {
+            width: 100%;
+            background: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #videoFeed {
+            width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .camera-message {
+            color: white;
+            font-size: 18px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .status-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 14px;
+            background: #f8fff9;
+            border: 2px solid #d8eadb;
+        }
+
+        .status-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .detected {
+            color: #2e7d32;
+        }
+
+        .not-detected {
+            color: #c62828;
+        }
+
+        .confidence {
+            font-size: 18px;
+            margin-top: 8px;
+        }
+
+        .detection-time {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .recent-title {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .clear-history-btn {
+            border: none;
+            background: #c62828;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .clear-history-btn:hover {
+            background: #a51f1f;
+        }
+
+        .clear-history-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 14px;
+            padding: 15px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .notification img {
+            width: 160px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #eee;
+        }
+
+        .notification-details {
+            flex: 1;
+        }
+
+        .animal-name {
+            font-size: 21px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .notification-confidence {
+            margin-top: 7px;
+            font-size: 16px;
+        }
+
+        .notification-time {
+            margin-top: 7px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .notification-id {
+            margin-top: 6px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .no-notifications {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 14px;
+            color: #777;
+        }
+
+        .navbar {
+            width: 100%;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid #e5eae5;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .menu-btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            margin-left: 20px;
+            border: none;
+            border-radius: 12px;
+            background: #2e7d32;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(46, 125, 50, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(46, 125, 50, 0.35);
+        }
+
+        .menu-btn:active {
+            transform: scale(0.94);
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 20px;
+            color: #222;
+        }
+
+        .logo-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #249b38;
+            letter-spacing: 0.2px;
+        }
+
+        .logo-subtitle {
+            margin-top: 3px;
+            font-size: 11px;
+            color: #777;
+        }
+
+        .navbar-right {
+            margin-left: auto;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: left 0.3s ease;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            height: 90px;
+            padding: 20px;
+            background: #2e7d32;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .sidebar-subtitle {
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .close-btn {
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .sidebar-links {
+            padding: 15px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 15px;
+            margin-bottom: 5px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-links a:hover {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: 94%;
+            }
+
+            .notification {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notification img {
+                width: 100%;
+                height: 200px;
+            }
+
+            .video-container {
+                min-height: 220px;
+            }
+
+            .recent-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .clear-history-btn {
+                width: 100%;
+            }
+
+            .navbar {
+                padding: 0 10px;
+            }
+
+            .menu-btn {
+                margin-left: 0;
+                margin-right: 10px;
+            }
+
+            .logo {
+                margin-left: 0;
+            }
+
+            .logo-title {
+                font-size: 20px;
+            }
+
+            .logo-subtitle {
+                font-size: 9px;
+            }
+
+            .sidebar {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <a href="/index" class="logo">
+        <div class="logo-title" data-translate>Smart Farm Assistant</div>
+        <div class="logo-subtitle" data-translate>IOT Powered Smart Crop Protection</div>
+    </a>
+    <div class="navbar-right"></div>
+</nav>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <div class="sidebar-title">Smart Farm Assistant</div>
+            <div class="sidebar-subtitle">IOT Powered Smart Crop Protection</div>
+        </div>
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-links">
+        <a href="/index">🏠 Dashboard</a>
+        <a href="/profile">👤 Profile</a>
+        <a href="/notifications">🔔 Notifications</a>
+        <a href="/about">ℹ️ About</a>
+    </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+
+    <div class="top-buttons">
+        <button class="btn btn-green" onclick="startMonitoring()">
+            ▶ Start Monitoring
+        </button>
+        <button class="btn btn-red" onclick="stopMonitoring()">
+            ■ Stop Monitoring
+        </button>
+        <button class="btn btn-blue" onclick="captureImage()">
+            📸 Capture
+        </button>
+    </div>
+
+    <div class="monitor-card">
+
+        <div class="monitor-title">
+            📷 Live Camera Monitoring
+        </div>
+
+        <div class="video-container">
+            <img id="videoFeed" src="" alt="Camera Feed">
+
+            <div id="cameraMessage" class="camera-message">
+                Camera is not running.
+                <br>
+                <br>
+                Click <b>Start Monitoring</b> to begin.
+            </div>
+        </div>
+
+        <div id="statusCard" class="status-card">
+
+            <div id="statusTitle" class="status-title not-detected">
+                No animal detected
+            </div>
+
+            <div class="confidence">
+                🎯 Confidence:
+                <b id="confidence">0%</b>
+            </div>
+
+            <div class="detection-time">
+                ⏰ Time:
+                <span id="detectionTime">--</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="recent-header">
+
+        <div class="recent-title">
+            🔔 Latest Animal Detections
+        </div>
+
+        <button id="clearHistoryButton" class="clear-history-btn" onclick="clearHistory()">
+            🗑 Clear History
+        </button>
+
+    </div>
+
+    <div id="notifications" class="notifications">
+
+        {% if notifications %}
+
+            {% for notification in notifications %}
+
+                <div class="notification">
+
+                    <img
+                        src="{{ url_for('static', filename=notification.image) }}"
+                        alt="Animal Detection"
+                        onerror="this.style.display='none';"
+                    >
+
+                    <div class="notification-details">
+
+                        <div class="animal-name">
+                            🐾 {{ notification.animal|upper }}
+                        </div>
+
+                        <div class="notification-confidence">
+                            🎯 Confidence:
+                            <b>
+                                {{ "%.2f"|format(notification.confidence) }}%
+                            </b>
+                        </div>
+
+                        <div class="notification-time">
+                            ⏰ {{ notification.detected_at }}
+                        </div>
+
+                        <div class="notification-id">
+                            Detection ID: #{{ notification.id }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="no-notifications">
+                🐾 No animal detections yet.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+const videoFeed = document.getElementById("videoFeed");
+const cameraMessage = document.getElementById("cameraMessage");
+const statusTitle = document.getElementById("statusTitle");
+const confidenceElement = document.getElementById("confidence");
+const detectionTime = document.getElementById("detectionTime");
+const notificationsElement = document.getElementById("notifications");
+const clearHistoryButton = document.getElementById("clearHistoryButton");
+
+let statusTimer = null;
+let notificationTimer = null;
+
+function startMonitoring() {
+    fetch("/start_monitoring", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            alert(data.message || "Could not start monitoring");
+            return;
+        }
+
+        videoFeed.src = "/video_feed?time=" + Date.now();
+        videoFeed.style.display = "block";
+        cameraMessage.style.display = "none";
+
+        startStatusChecking();
+        startNotificationChecking();
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Could not connect to server.");
+    });
+}
+
+function stopMonitoring() {
+    fetch("/stop_monitoring", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        videoFeed.src = "";
+        videoFeed.style.display = "none";
+        cameraMessage.style.display = "block";
+
+        statusTitle.innerText = "No animal detected";
+        statusTitle.className = "status-title not-detected";
+
+        confidenceElement.innerText = "0%";
+        detectionTime.innerText = "--";
+
+        if (statusTimer) {
+            clearInterval(statusTimer);
+            statusTimer = null;
+        }
+
+        if (notificationTimer) {
+            clearInterval(notificationTimer);
+            notificationTimer = null;
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+function captureImage() {
+    window.location.href = "/capture";
+}
+
+function checkDetectionStatus() {
+    fetch("/detection_status?time=" + Date.now())
+    .then(response => {
+        if (!response.ok) {
+            return null;
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        if (!data) {
+            return;
+        }
+
+        if (data.detected) {
+            let animal = data.animal || "Animal";
+
+            statusTitle.innerText =
+                "🐾 " + animal.toUpperCase() + " DETECTED";
+
+            statusTitle.className = "status-title detected";
+
+            confidenceElement.innerText =
+                Number(data.confidence || 0).toFixed(1) + "%";
+
+            detectionTime.innerText = data.time || "--";
+        } else {
+            statusTitle.innerText = "No animal detected";
+            statusTitle.className = "status-title not-detected";
+            confidenceElement.innerText = "0%";
+            detectionTime.innerText = "--";
+        }
+    })
+    .catch(error => {
+        console.error("Detection status error:", error);
+    });
+}
+
+function startStatusChecking() {
+    if (statusTimer) {
+        clearInterval(statusTimer);
+    }
+
+    checkDetectionStatus();
+
+    statusTimer = setInterval(
+        checkDetectionStatus,
+        1000
+    );
+}
+
+function loadNotifications() {
+    fetch("/get_notifications?time=" + Date.now())
+    .then(response => {
+        if (!response.ok) {
+            return null;
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        if (!data || !data.success) {
+            return;
+        }
+
+        const list = data.notifications || [];
+
+        if (list.length === 0) {
+            notificationsElement.innerHTML = `
+                <div class="no-notifications">
+                    🐾 No animal detections yet.
+                </div>
+            `;
+            return;
+        }
+
+        let html = "";
+
+        list.forEach(notification => {
+            let imagePath = notification.image || "";
+            let imageUrl = "/static/" + imagePath;
+
+            html += `
+                <div class="notification">
+                    <img
+                        src="${imageUrl}"
+                        alt="Animal Detection"
+                        onerror="this.style.display='none';"
+                    >
+
+                    <div class="notification-details">
+
+                        <div class="animal-name">
+                            🐾
+                            ${escapeHtml(
+                                String(
+                                    notification.animal || ""
+                                ).toUpperCase()
+                            )}
+                        </div>
+
+                        <div class="notification-confidence">
+                            🎯 Confidence:
+                            <b>
+                                ${Number(
+                                    notification.confidence || 0
+                                ).toFixed(2)}%
+                            </b>
+                        </div>
+
+                        <div class="notification-time">
+                            ⏰
+                            ${escapeHtml(
+                                notification.detected_at || ""
+                            )}
+                        </div>
+
+                        <div class="notification-id">
+                            Detection ID: #${notification.id}
+                        </div>
+
+                    </div>
+                </div>
+            `;
+        });
+
+        notificationsElement.innerHTML = html;
+    })
+    .catch(error => {
+        console.error("Notification error:", error);
+    });
+}
+
+function startNotificationChecking() {
+    if (notificationTimer) {
+        clearInterval(notificationTimer);
+    }
+
+    loadNotifications();
+
+    notificationTimer = setInterval(
+        loadNotifications,
+        2000
+    );
+}
+
+function clearHistory() {
+    const confirmed = confirm(
+        "Are you sure you want to clear your complete detection history?\n\n" +
+        "This will permanently delete your notification records and saved detection images."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    clearHistoryButton.disabled = true;
+    clearHistoryButton.innerText = "⏳ Clearing...";
+
+    fetch("/clear_notifications", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            notificationsElement.innerHTML = `
+                <div class="no-notifications">
+                    🐾 Detection history cleared successfully.
+                </div>
+            `;
+
+            alert("Detection history cleared successfully.");
+        } else {
+            alert(
+                data.message ||
+                "Could not clear history."
+            );
+        }
+    })
+    .catch(error => {
+        console.error(
+            "Clear history error:",
+            error
+        );
+
+        alert(
+            "Could not connect to the server."
+        );
+    })
+    .finally(() => {
+        clearHistoryButton.disabled = false;
+        clearHistoryButton.innerText = "🗑 Clear History";
+    });
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+}
+
+loadNotifications();
+checkDetectionStatus();
+
+fetch("/monitoring_status")
+    .then(response => {
+        if (!response.ok) {
+            return null;
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        if (!data) {
+            return;
+        }
+
+        if (data.running) {
+            videoFeed.src =
+                "/video_feed?time=" + Date.now();
+
+            videoFeed.style.display = "block";
+            cameraMessage.style.display = "none";
+
+            startStatusChecking();
+            startNotificationChecking();
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    $(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
+
+</body>
+</html>

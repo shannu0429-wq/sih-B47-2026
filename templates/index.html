@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Protection | Dashboard</title>
+        <link
+        rel="icon"
+        type="image/x-icon"
+        href="{{ url_for('static', filename='favicon.ico') }}"
+    >
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    background: #f5f8f5;
+}
+.navbar {
+    width: 100%;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e5eae5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.menu-btn {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 18px;
+    border: none;
+    border-radius: 12px;
+    background: #2e7d32;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(46, 125, 50, 0.25);
+    transition: all 0.3s ease;
+    margin-left: 20px;
+}
+.menu-btn:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(46, 125, 50, 0.35);
+}
+.menu-btn:active {
+    transform: scale(0.94);
+}
+.logo {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 20px;
+    color: #222;
+}
+.logo-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1b5e20;
+    letter-spacing: 0.2px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 26px;
+    font-weight: 800;
+    color: #249b38;
+}
+.logo-subtitle {
+    margin-top: 3px;
+    font-size: 11px;
+    color: #78909c;
+    letter-spacing: 0.4px;
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+    font-size: 11px;
+    color: #777;
+    margin-top: 3px;
+}
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 2000;
+    transition: left 0.3s ease;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    height: 90px;
+    padding: 20px;
+    background: #2e7d32;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sidebar-subtitle {
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.close-btn {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.sidebar-links {
+    padding: 15px;
+}
+
+.sidebar-links a {
+    display: block;
+    padding: 15px;
+    margin-bottom: 5px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-links a:hover {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 1500;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .sidebar {
+        width: 270px;
+        left: -270px;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+}
+@media (max-width: 600px) {
+   .navbar {
+        height: 68px;
+        padding: 0 16px;
+    }
+   .menu-btn {
+        width: 42px;
+        height: 42px;
+        margin-right: 12px;
+        font-size: 22px;
+    }
+   .logo-title {
+        font-size: 18px;
+    }
+   .logo-subtitle {
+        font-size: 9px;
+    }
+   .sidebar {
+        width: 285px;
+    }
+}
+@media (max-width: 380px) {
+   .sidebar {
+        width: 270px;
+    }
+   .logo-title {
+        font-size: 16px;
+    }
+   .logo-subtitle {
+        display: none;
+    }
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 5px;
+    transition: 0.3s ease;
+}
+.nav-links a:hover {
+    color: #35ad49;
+}
+.profile-btn {
+    background: #35b84a!important;
+    color: white!important;
+    padding: 11px 22px!important;
+    border-radius: 25px;
+}
+.profile-btn:hover {
+    background: #249b38!important;
+}
+.hero {
+    min-height: 680px;
+    position: relative;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQDfNxoOQQSKB4efLV2ATdZSwcOq391cm_OjsprMJsPg&s=10");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.30));
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    width: 90%;
+    text-align: center;
+    color: white;
+    padding: 80px 20px 40px;
+}
+.badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(5px);
+}
+.hero h1 {
+    font-size: 52px;
+    line-height: 1.15;
+    margin: 0 auto 20px;
+    font-weight: 800;
+    max-width: 900px;
+}
+.hero h1 span {
+    color: #7CFF7C;
+    display: block;
+}
+.hero p {
+    max-width: 750px;
+    margin: 0 auto;
+    font-size: 21px;
+    line-height: 1.6;
+    color: #f5f5f5;
+}
+.hero-description {
+    font-size: 16px!important;
+    max-width: 680px!important;
+    margin-top: 12px!important;
+    color: #e4e4e4!important;
+}
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+.btn-primary,
+.btn-secondary {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background: #35b84a;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.btn-primary:hover {
+    background: #249b38;
+    transform: translateY(-3px);
+}
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+.btn-secondary:hover {
+    background: transparent;
+    color: white;
+    transform: translateY(-3px);
+}
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    margin-top: 45px;
+}
+.stat-card {
+    width: 210px;
+    min-height: 105px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    transition: transform 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-8px);
+}
+.stat-number {
+    font-size: 25px;
+    font-weight: 800;
+    color: #35ad49;
+    margin-bottom: 5px;
+}
+.stat-text {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+@media (max-width: 768px) {
+   .navbar {
+        height: auto;
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+   .nav-links {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+   .nav-links a {
+        font-size: 14px;
+    }
+   .hero {
+        min-height: 750px;
+    }
+   .hero-content {
+        padding-top: 60px;
+    }
+   .hero h1 {
+        font-size: 36px;
+    }
+   .hero p {
+        font-size: 17px;
+    }
+   .hero-description {
+        font-size: 14px!important;
+    }
+   .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+   .btn-primary,
+   .btn-secondary {
+        width: 220px;
+    }
+   .stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+   .stat-card {
+        width: 240px;
+    }
+}
+.how-it-works {
+    padding: 80px 5%;
+    background: #f5f8f5;
+}
+.how-header {
+    text-align: center;
+    margin-bottom: 55px;
+}
+.how-header h1 {
+    color: #2e7d32;
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+.how-header p {
+    color: #68756a;
+    font-size: 20px;
+}
+.steps {
+    max-width: 1250px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+font-size:10px;
+}
+.class1 {
+    position: relative;
+    width: 250px;
+    min-height: 280px;
+    padding: 82px 42px;
+    background: white;
+    border-radius: 30px;
+    border: 1px solid #e3ebe3;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+font-size:10px;
+}
+/*.class1 p{
+font-size:20px;
+}*/
+.class1:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 35px rgba(46, 125, 50, 0.16);
+}
+.step-icon {
+    width: 75px;
+    height: 75px;
+    margin: 10px auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f5e9;
+    border-radius: 50%;
+    font-size: 32px;
+}
+.step-number {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #9aaa9c;
+}
+.class1 h2 {
+    color: #1b5e20;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.class1 p {
+    color: #667166;
+    font-size: 20px;
+    line-height: 1.7;
+    margin: 0;
+}
+.step-arrow {
+    color: #43a047;
+    font-size: 32px;
+    font-weight: bold;
+}
+.plass {
+    width: 100%;
+    padding: 20px;
+    background: #1b5e20;
+    color: white;
+    text-align: center;
+}
+.plass p {
+    margin: 0;
+    font-size: 14px;
+}
+@media (max-width: 1100px) {
+   .steps {
+        flex-wrap: wrap;
+    }
+   .step-arrow {
+        display: none;
+    }
+}
+@media (max-width: 600px) {
+   .how-it-works {
+        padding: 60px 20px;
+    }
+   .how-header h1 {
+        font-size: 30px;
+    }
+   .how-header p {
+        font-size: 17px;
+    }
+   .steps {
+        flex-direction: column;
+    }
+   .class1 {
+        width: 100%;
+        max-width: 340px;
+    }
+}
+.navbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#languageSelect {
+    padding: 9px 35px 9px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.12);
+    color: #1b5e20;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+#languageSelect option {
+    background: #166534;
+    color: white;
+}
+.nav-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 20px;
+    transition: 0.3s;
+}
+.nav-icon:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.08);
+}
+@media (max-width: 768px) {
+    #languageSelect {
+        padding: 8px 32px 8px 10px;
+        font-size: 13px;
+    }
+}
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <a href="index.html" class="logo">
+        <div class="logo-title" data-translate>Smart Farm Assistant</div>
+        <div class="logo-subtitle"data-translate>IOT Powered Smart Crop Protection</div>
+    </a>
+    <div class="navbar-right">
+        <select onchange="if(this.value) window.location.href=this.value;">
+    <option value="">🌐 Select Language</option>
+    <option value="/index">🌐 English</option>
+    <option value="/index/telugu.html">తెలుగు</option>
+    <option value="/index/hindi.html">हिंदी</option>
+    <option value="/index/tamil.html">தமிழ்</option>
+    <option value="/index/kannada.html">ಕನ್ನಡ</option>
+    <option value="/index/marati.html">मराठी</option>
+</select>
+    </div>
+</nav>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <div class="sidebar-title">Smart Farm Assistant</div>
+            <div class="sidebar-subtitle">IOT Powered Smart Crop Protection</div>
+            
+        </div>
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-links">
+        <a href="/camera">📡 Monitoring</a>
+        <a href="/profile">👤 Profile</a>
+        <a href="/notifications">
+    🔔 Notifications
+</a>
+
+        <a href="/about">
+
+            ℹ️ About
+
+        </a>
+    </div>
+</div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="badge">SMART CROP PROTECTION</div>
+        <h1>Protect Your Crops with <span>Smart Animal Detection</span></h1>
+        <p>AI-powered animal detection and real-time crop protection for safer and smarter farming.</p>
+        <p class="hero-description">Detect animals automatically using sensors and AI, identify the threat, activate suitable deterrents, and instantly alert the farmer.</p>
+        <div class="hero-buttons">
+            <a href="/camera" class="btn-primary">🚀 Start Detection</a>
+            <a href="https://youtu.be/yc5gvKLAu0Y"target="_blank"class="btn-secondary">👉 Watch Demo</a>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-text">Field Monitoring</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">AI</div>
+                <div class="stat-text">Animal Detection</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">REAL-TIME</div>
+                <div class="stat-text">Farmer Alerts</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works" id="how-it-works">
+    <div class="how-header">
+        <h1 data-translate="how_it_works">How It Works</h1>
+        <p data-translate="It Takes in Four Steps">It Takes in Four Steps</p>
+    </div>
+    <div class="steps">
+        <div class="class1">
+            <span class="step-number">01</span>
+            <h2 data-translate="Step 1">Step 1</h2>
+            <p data-translate="Sensor detects Movement">Sensor detects Movement</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="class1">
+                        <span class="step-number">02</span>
+            <h2 data-translate="Step 2">Step 2</h2>
+            <p data-translate="Open CV Identifies the animal">Open CV Identifies the animal</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="class1">
+                        <span class="step-number">03</span>
+            <h2 data-translate="Step 3">Step 3</h2>
+            <p data-translate="Threat is analyzed">Threat is analyzed</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="class1">
+            
+            <span class="step-number">04</span>
+            <h2 data-translate="Step 4">Step 4</h2>
+            <p data-translate="Farmer receives an alert">Farmer receives an alert</p>
+        </div>
+    </div>
+</section>
+
+<footer class="plass">
+    <p>© Smart Farm Assistant</p>
+</footer>
+<script>
+
+
+function toggleSidebar() {
+
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+
+}
+
+
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+
+</script>
+</body>
+</html>

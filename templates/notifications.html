@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Smart Crop Protection | Notifications</title>
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            overflow-y: auto;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f8f3;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        .navbar {
+            width: 100%;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid #e5eae5;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .menu-btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            margin-left: 0;
+            border: none;
+            border-radius: 12px;
+            background: #2e7d32;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(46, 125, 50, 0.25);
+            transition: 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+        }
+
+        .menu-btn:active {
+            transform: scale(0.94);
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 0;
+        }
+
+        .logo-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #249b38;
+        }
+
+        .logo-subtitle {
+            margin-top: 3px;
+            font-size: 11px;
+            color: #777;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: left 0.3s ease;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            height: 90px;
+            padding: 20px;
+            background: #2e7d32;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .sidebar-subtitle {
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .close-btn {
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .sidebar-links {
+            padding: 15px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 15px;
+            margin-bottom: 5px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-links a:hover {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 25px auto;
+            padding-bottom: 30px;
+        }
+
+        h2 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 24px;
+        }
+
+        .notification {
+            background: white;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .notification img {
+            width: 190px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #eee;
+            flex-shrink: 0;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .animal {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .confidence {
+            font-size: 18px;
+            margin-top: 7px;
+        }
+
+        .time {
+            color: #777;
+            margin-top: 7px;
+        }
+
+        .id {
+            color: #999;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .empty {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                height: 70px;
+                padding: 0 15px;
+            }
+
+            .menu-btn {
+                width: 42px;
+                height: 42px;
+                margin-right: 12px;
+            }
+
+            .logo-title {
+                font-size: 19px;
+            }
+
+            .logo-subtitle {
+                font-size: 9px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            h2 {
+                font-size: 21px;
+            }
+
+            .notification {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .notification img {
+                width: 100%;
+                height: 220px;
+            }
+
+            .animal {
+                font-size: 21px;
+            }
+
+            .confidence {
+                font-size: 16px;
+            }
+
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+        <a href="/index" class="logo">
+            <div class="logo-title" data-translate>Smart Farm Assistant</div>
+            <div class="logo-subtitle" data-translate>IOT Powered Smart Crop Protection</div>
+        </a>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-title">Smart Farm Assistant</div>
+                <div class="sidebar-subtitle">IOT Powered Smart Crop Protection</div>
+            </div>
+
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+        </div>
+
+        <div class="sidebar-links">
+            <a href="/index">🏠 Dashboard</a>
+            <a href="/camera">📡 Monitoring</a>
+            <a href="/profile">👤 Profile</a>
+            <a href="/about">ℹ️ About</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+
+        <h2>Latest 10 Animal Detections</h2>
+
+        {% if notifications %}
+
+            {% for notification in notifications %}
+
+                <div class="notification">
+
+                    <img
+                        src="{{ url_for('static', filename=notification.image) }}"
+                        alt="Animal Detection"
+                        onerror="this.style.display='none';"
+                    >
+
+                    <div class="details">
+
+                        <div class="animal">
+                            🐾 {{ notification.animal|upper }}
+                        </div>
+
+                        <div class="confidence">
+                            🎯 Confidence:
+                            <b>{{ "%.2f"|format(notification.confidence) }}%</b>
+                        </div>
+
+                        <div class="time">
+                            ⏰ {{ notification.detected_at }}
+                        </div>
+
+                        <div class="id">
+                            Detection ID: #{{ notification.id }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                🐾 No animal detections yet.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("overlay");
+
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+        }
+
+        $(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+    </script>
+
+</body>
+
+</html>

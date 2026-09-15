@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Smart Crop Protection | Sign Up</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+         <link
+        rel="icon"
+        type="image/x-icon"
+        href="{{ url_for('static', filename='favicon.ico') }}"
+    >
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        :root {
+            --green-primary: #2e7d32;
+            --dark-green-bg: #1b5e20;
+            --border-color: #d9d9d9;
+        }
+
+        body {
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-image: url("https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmYXJtfGVufDB8fDB8fHww");
+            background-size: cover;
+            background-position: center;
+        }
+
+      form {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+.left {
+    width: 50%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+        
+        .right {
+            width: 50%;
+            padding: 30px 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #signup {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            padding: 25px 30px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        #signup #p1 {
+            color: var(--green-primary);
+            font-size: 25px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        #signup #p2 {
+            color: var(--green-primary);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #signup label {
+            display: block;
+            text-align: left;
+            padding-left: 8px;
+            margin-bottom: px;
+            font-weight: 500;
+        }
+
+        #signup input {
+            outline: none;
+            width: 100%;
+            height: 42px;
+            margin-bottom: 5px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            font-size: 0.90rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #signup input:focus {
+            border-color: var(--green-primary);
+        }
+
+        #signup input::placeholder {
+            color: #777;
+        }
+
+        #signup button {
+            width: 100%;
+            padding: 12px 30px;
+            background-color: var(--green-primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #signup button:hover {
+            background-color: var(--dark-green-bg);
+        }
+
+        #signup button:active {
+            transform: translateY(2px);
+        }
+
+        #signup a {
+            color: var(--green-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #signup a:hover {
+            text-decoration: none;
+        }
+
+        @media (max-width: 800px) {
+            body {
+                overflow: auto;
+            }
+
+            form {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .left,
+            .right {
+                width: 100%;
+            }
+
+            .left {
+                min-height: 30vh;
+            }
+
+            .right {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="/signup" method="POST">
+
+        <div class="left">
+            <h1>Smart Farm Assistant</h1>
+                   <img
+    src="{{ url_for('static', filename='sih logo.jpeg') }}"
+    alt="Smart Farm Logo"
+    width="60"
+    style="border-radius: 100px; opacity: 0.7;"
+>
+        </div>
+
+        <div class="right">
+            <div id="signup">
+
+                <p id="p1">Welcome!</p>
+                <p id="p2">Create Your Account</p>
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit">Sign Up</button>
+
+                <br>
+
+                <a href="/login">
+                    <label style="text-align:center; margin-bottom:5px; color:#2e7d32">Already have an account? </label>Log in
+                </a>
+
+            </div>
+        </div>
+
+    </form>
+
+</body>
+</html>

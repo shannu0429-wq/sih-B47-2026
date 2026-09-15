@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>स्मार्ट फार्म असिस्टेंट</title>
+
+    <!-- Hindi Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans Devanagari", sans-serif;
+            background: #f5f7f5;
+            color: #333;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 90px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 55px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+
+        .menu-btn {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 10px;
+            border: none;
+
+            background: #39a85a;
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+        }
+
+
+        .logo-text h2 {
+            color: #38a456;
+
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+
+        .logo-text p {
+            color: #aaa;
+
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+
+        .language {
+            color: #555;
+
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+
+            min-height: 680px;
+    position: relative;
+             background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQDfNxoOQQSKB4efLV2ATdZSwcOq391cm_OjsprMJsPg&s=10");
+    background-size: cover;
+    background-position: center;
+
+            background-size: cover;
+            background-position: center;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+        }
+
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+
+        .tag {
+
+            display: inline-block;
+
+            padding: 10px 25px;
+
+            border-radius: 30px;
+
+            background: rgba(255, 255, 255, 0.25);
+
+            border: 1px solid rgba(255, 255, 255, 0.5);
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin-bottom: 25px;
+        }
+
+
+
+        /* ================= HERO TITLE ================= */
+
+        .hero h1 {
+
+            font-size: 50px;
+
+            line-height: 1.35;
+
+            font-weight: 800;
+
+            text-shadow:
+                2px 3px 5px rgba(0, 0, 0, 0.4);
+        }
+
+
+        .green-text {
+
+            color:green;
+        }
+
+
+
+        /* ================= HERO DESCRIPTION ================= */
+
+        .hero-description {
+
+            font-size: 18px;
+
+            margin-top: 25px;
+
+            line-height: 1.8;
+        }
+
+
+        .hero-small {
+
+            font-size: 14px;
+
+            margin-top: 12px;
+
+            line-height: 1.8;
+        }
+
+
+
+        /* ================= BUTTONS ================= */
+
+        .buttons {
+
+            margin-top: 25px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 18px;
+        }
+
+
+        .btn {
+
+            padding: 13px 30px;
+
+            border-radius: 30px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.3s;
+        }
+
+
+        .start-btn {
+
+            background: #2ed36a;
+
+            color: white;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+
+        .demo-btn {
+
+            border: 2px solid white;
+
+            color: white;
+
+            background: transparent;
+        }
+
+
+        .btn:hover {
+
+            transform: translateY(-3px);
+        }
+
+
+
+        /* ================= FEATURE CARDS ================= */
+
+        .features {
+
+            margin-top: 35px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 25px;
+        }
+
+
+        .feature-card {
+
+            width: 180px;
+
+            padding: 20px 15px;
+
+            background: white;
+
+            border-radius: 22px;
+
+            color:black;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+
+        .feature-card h3 {
+
+            color:green;
+
+            font-size: 18px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .feature-card p {
+
+            font-size: 13px;
+        }
+
+
+
+        /* ================= HOW IT WORKS ================= */
+
+        .how-section {
+
+            min-height: 620px;
+
+            background: #fff;
+
+            padding: 90px 50px 70px;
+
+            text-align: center;
+        }
+
+
+        .how-section h2 {
+
+            color: #75a77c;
+
+            font-size: 38px;
+
+            font-weight: 800;
+        }
+
+
+        .how-subtitle {
+
+            color: #999;
+
+            font-size: 18px;
+
+            margin-top: 5px;
+        }
+
+
+
+        /* ================= STEPS ================= */
+
+        .steps {
+
+            max-width: 1100px;
+
+            margin: 70px auto 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 0;
+        }
+
+
+        .step-card {
+
+            width: 230px;
+
+            height: 230px;
+
+            background: #fff;
+
+            border-radius: 20px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.06);
+
+            position: relative;
+        }
+
+
+        .step-number {
+
+            position: absolute;
+
+            top: 15px;
+
+            right: 25px;
+
+            color: #aaa;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .step-card h3 {
+
+            color: #666;
+
+            font-size: 19px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .step-card p {
+
+            color: #999;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            max-width: 175px;
+        }
+
+
+        .arrow {
+
+            font-size: 30px;
+
+            color: #68a66f;
+
+            padding: 0 12px;
+        }
+
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            height: 65px;
+
+            background: #477d52;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 14px;
+        }
+
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+
+            .hero h1 {
+
+                font-size: 38px;
+            }
+
+
+            .hero {
+
+                padding: 30px;
+            }
+
+
+            .features {
+
+                flex-wrap: wrap;
+            }
+
+
+            .steps {
+
+                flex-direction: column;
+
+                gap: 20px;
+            }
+
+
+            .arrow {
+
+                transform: rotate(90deg);
+            }
+
+        }
+
+    </style>
+
+</head>
+<script>
+    function changeLanguage(page) {
+        window.location.href = page;
+    }
+</script>
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo-section">
+
+            <button class="menu-btn">
+                ☰
+            </button>
+
+
+            <div class="logo-text">
+
+                <h2>
+                    स्मार्ट फार्म असिस्टेंट
+                </h2>
+
+                <p>
+                    IoT आधारित स्मार्ट फसल सुरक्षा
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="navbar-right">
+            <select onchange="if(this.value) window.location.href=this.value;">
+    <option value="">🌐 Select Language</option>
+    <option value="/index">🌐 English</option>
+    <option value="/index/telugu.html">తెలుగు</option>
+    <option value="/index/hindi.html">हिंदी</option>
+    <option value="/index/tamil.html">தமிழ்</option>
+    <option value="/index/kannada.html">ಕನ್ನಡ</option>
+    <option value="/index/marati.html">मराठी</option>
+</select>
+    </div>
+    </nav>
+
+
+
+    <!-- ================= HERO SECTION ================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+
+            <div class="tag">
+
+                स्मार्ट फसल सुरक्षा
+
+            </div>
+
+
+
+            <h1>
+
+                अपनी फसलों की सुरक्षा करें
+
+                <br>
+
+                <span class="green-text">
+
+                    स्मार्ट पशु पहचान के साथ
+
+                </span>
+
+            </h1>
+
+
+
+            <p class="hero-description">
+
+                AI आधारित पशु पहचान और
+                रियल-टाइम फसल सुरक्षा के साथ
+                सुरक्षित और स्मार्ट खेती।
+
+            </p>
+
+
+
+            <p class="hero-small">
+
+                सेंसर और AI की सहायता से जानवरों का
+                स्वचालित रूप से पता लगाएं,
+                खतरे की पहचान करें,
+                उचित रोकथाम उपाय सक्रिय करें
+                और तुरंत किसान को अलर्ट भेजें।
+
+            </p>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+
+                <a href="#" class="btn start-btn">
+
+                    🚀 पहचान शुरू करें
+
+                </a>
+
+
+                <a href="#" class="btn demo-btn">
+
+                    ▶ डेमो देखें
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- FEATURE CARDS -->
+
+            <div class="features">
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        24/7
+                    </h3>
+
+                    <p>
+                        खेत की निगरानी
+                    </p>
+
+                </div>
+
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        AI
+                    </h3>
+
+                    <p>
+                        पशु पहचान
+                    </p>
+
+                </div>
+
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        रियल-टाइम
+                    </h3>
+
+                    <p>
+                        किसान अलर्ट
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="how-section">
+
+
+        <h2>
+
+            यह कैसे काम करता है
+
+        </h2>
+
+
+        <p class="how-subtitle">
+
+            यह चार चरणों में काम करता है
+
+        </p>
+
+
+
+        <div class="steps">
+
+
+            <!-- STEP 1 -->
+
+            <div class="step-card">
+
+                <span class="step-number">
+                    01
+                </span>
+
+
+                <h3>
+                    चरण 1
+                </h3>
+
+
+                <p>
+
+                    सेंसर गतिविधि का
+                    पता लगाता है
+
+                </p>
+
+            </div>
+
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+
+            <!-- STEP 2 -->
+
+            <div class="step-card">
+
+                <span class="step-number">
+                    02
+                </span>
+
+
+                <h3>
+                    चरण 2
+                </h3>
+
+
+                <p>
+
+                    OpenCV जानवर की
+                    पहचान करता है
+
+                </p>
+
+            </div>
+
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+
+            <!-- STEP 3 -->
+
+            <div class="step-card">
+
+                <span class="step-number">
+                    03
+                </span>
+
+
+                <h3>
+                    चरण 3
+                </h3>
+
+
+                <p>
+
+                    खतरे का
+                    विश्लेषण किया जाता है
+
+                </p>
+
+            </div>
+
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+
+            <!-- STEP 4 -->
+
+            <div class="step-card">
+
+                <span class="step-number">
+                    04
+                </span>
+
+
+                <h3>
+                    चरण 4
+                </h3>
+
+
+                <p>
+
+                    किसान को
+                    अलर्ट प्राप्त होता है
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        © स्मार्ट फार्म असिस्टेंट
+
+    </footer>
+
+
+</body>
+
+</html>
