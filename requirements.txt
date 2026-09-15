@@ -1,0 +1,7 @@
+Flask
+mysql-connector-python
+requests
+opencv-python-headless
+pyserial
+ultralytics
+gunicorn
